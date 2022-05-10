@@ -4,6 +4,7 @@
 #include "OverheadWidget.h"
 
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerState.h"
 
 void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 {
@@ -12,6 +13,23 @@ void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 		DisplayText->SetText(FText::FromString(TextToDisplay));
 	}
 }
+
+void UOverheadWidget::ShowPlayerName(APawn* InPawn)
+{
+	auto PlayerState = InPawn->GetPlayerState();
+
+	if (!PlayerState)
+	{
+		return;
+	}
+	
+	auto PlayerName = PlayerState->GetPlayerName();
+	
+	FString PlayerNameString = FString::Printf(TEXT("Name: %s"), *PlayerName);
+
+	SetDisplayText(PlayerNameString);
+}
+
 
 void UOverheadWidget::ShowPlayerNetRole(APawn* InPawn)
 {
@@ -35,6 +53,30 @@ void UOverheadWidget::ShowPlayerNetRole(APawn* InPawn)
 	FString LocalRoleString = FString::Printf(TEXT("Local Role: %s"), *Role);
 
 	SetDisplayText(LocalRoleString);
+}
+
+void UOverheadWidget::ShowRemotePlayerNetRole(APawn* InPawn)
+{
+	ENetRole RemoteRole = InPawn->GetRemoteRole();
+	FString Role;
+	switch (RemoteRole)
+	{
+		case ROLE_None:
+			Role = FString("None");
+			break;
+		case ROLE_SimulatedProxy:
+			Role = FString("SimulatedProxy");
+			break;
+		case ROLE_AutonomousProxy:
+			Role = FString("AutonomousProxy");
+			break;
+		case ROLE_Authority:
+			Role = FString("Authority");
+			break;
+	}
+	FString RemoteRoleString = FString::Printf(TEXT("Remote Role: %s"), *Role);
+
+	SetDisplayText(RemoteRoleString);
 }
 
 void UOverheadWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)

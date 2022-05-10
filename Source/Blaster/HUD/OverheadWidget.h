@@ -21,8 +21,14 @@ public:
 	void SetDisplayText(FString TextToDisplay);
 
 	UFUNCTION(BlueprintCallable)
-	void ShowPlayerNetRole(APawn* InPawn);
+	void ShowPlayerName(APawn* InPawn);
 	
+	UFUNCTION(BlueprintCallable)
+	void ShowPlayerNetRole(APawn* InPawn);
+
+	UFUNCTION(BlueprintCallable)
+	void ShowRemotePlayerNetRole(APawn* InPawn);
+
 protected:
 	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 };

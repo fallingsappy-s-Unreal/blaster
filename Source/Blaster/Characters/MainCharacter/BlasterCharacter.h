@@ -17,9 +17,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 protected:
 	virtual void BeginPlay() override;
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void Turn(float Value);
+	void LookUp(float Value);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -27,6 +32,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* FollowCamera;
+
+	void AddMovementAlongAxis(float Value, EAxis::Type Axis);
 	
 public:	
 	

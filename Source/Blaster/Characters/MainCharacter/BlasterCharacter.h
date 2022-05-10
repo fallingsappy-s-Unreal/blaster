@@ -34,6 +34,9 @@ private:
 	class UCameraComponent* FollowCamera;
 
 	void AddMovementAlongAxis(float Value, EAxis::Type Axis);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* OverheadWidget;
 	
 public:	
 	

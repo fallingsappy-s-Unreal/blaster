@@ -92,8 +92,8 @@ void ABlasterCharacter::LookUp(float Value)
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
-{
-	if (OverlappingWeapon)
+{	
+	if (OverlappingWeapon && IsLocallyControlled())
 	{
 		OverlappingWeapon->ShowPickupWidget(false);
 	}

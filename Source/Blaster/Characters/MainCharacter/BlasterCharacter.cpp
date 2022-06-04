@@ -41,6 +41,8 @@ ABlasterCharacter::ABlasterCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+	
+	NetUpdateFrequency
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -189,6 +191,9 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		
 		bUseControllerRotationYaw = true;
 		TurnInPlace(DeltaTime);
+		
+		NetUpdateFrequency = 66.f;
+		MinNetUpdateFrequency = 33.f;
 	}
 
 	if (Speed > 0.f || bIsInAir)

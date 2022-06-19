@@ -30,6 +30,8 @@ protected:
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon(AWeapon* LastWeapon);
+
+	void FireButtonPressed(bool bPressed);
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
@@ -43,6 +45,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed;
+
+	bool bFireButtonPressed;
 public:	
 	
 };

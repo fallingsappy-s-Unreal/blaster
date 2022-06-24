@@ -38,6 +38,9 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire();
+
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
+	
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;

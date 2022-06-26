@@ -1,6 +1,8 @@
 #include "CombatComponent.h"
 
 #include "Blaster/Characters/MainCharacter/BlasterCharacter.h"
+#include "Blaster/HUD/BlasterHUD.h"
+#include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Blaster/Weapons/Weapon.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -12,7 +14,7 @@
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
+
 	BaseWalkSpeed = 600.f;
 	AimWalkSpeed = 450.f;
 }
@@ -28,10 +30,57 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (Character) 
+
+	if (Character)
 	{
-	    Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	}
+}
+
+void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+                                     FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	SetHUDCrosshairs(DeltaTime);
+}
+
+void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
+{
+	if (Character == nullptr || Character->Controller == nullptr)
+	{
+		return;
+	}
+
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+
+	if (Controller)
+	{
+		HUD = HUD == nullptr ? Cast<ABlasterHUD>(Controller->GetHUD()) : HUD;
+
+		if (HUD)
+		{
+			FHUDPackage* HUDPackage;
+
+			if (EquippedWeapon)
+			{
+				HUDPackage = new FHUDPackage(EquippedWeapon->CrosshairsCenter,
+				                             EquippedWeapon->CrosshairsLeft,
+				                             EquippedWeapon->CrosshairsRight,
+				                             EquippedWeapon->CrosshairsBottom,
+				                             EquippedWeapon->CrosshairsTop);
+			}
+			else
+			{
+				HUDPackage = new FHUDPackage(nullptr,
+				                             nullptr,
+				                             nullptr,
+				                             nullptr,
+				                             nullptr);
+			}
+
+			HUD->SetHUDPackage(*HUDPackage);
+		}
 	}
 }
 
@@ -50,7 +99,7 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
 	bAiming = bIsAiming;
-	if (Character) 
+	if (Character)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	}
@@ -117,17 +166,12 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 	{
 		return;
 	}
-	
+
 	if (Character)
 	{
 		Character->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
 	}
-}
-
-void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)

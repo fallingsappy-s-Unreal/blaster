@@ -1,6 +1,7 @@
 #include "Casing.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
 
 ACasing::ACasing()
@@ -22,6 +23,8 @@ void ACasing::BeginPlay()
 
 	CasingMesh->OnComponentHit.AddDynamic(this, &ACasing::OnHit);
 	CasingMesh->AddImpulse(GetActorForwardVector() * ShellEjectionImpulse);
+
+	CasingMesh->AddLocalRotation(UKismetMathLibrary::RandomRotator());
 
 	AActor::SetLifeSpan(3.f);
 }

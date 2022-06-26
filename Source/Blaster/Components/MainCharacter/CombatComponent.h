@@ -40,11 +40,18 @@ protected:
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
+
+	void SetHUDCrosshairs(float DeltaTime);
 	
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
+
 	class ABlasterCharacter* Character;
+
+	class ABlasterPlayerController* Controller;
+
+	class ABlasterHUD* HUD;
 
 	UPROPERTY(Replicated)
 	bool bAiming;

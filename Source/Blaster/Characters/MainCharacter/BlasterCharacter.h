@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Blaster/BlasterTypes/TurningInPlace.h"
+#include "Blaster/Interfaces/InteractWithCrosshairsInterface.h"
 #include "GameFramework/Character.h"
 #include "BlasterCharacter.generated.h"
 
 UCLASS()
-class BLASTER_API ABlasterCharacter : public ACharacter
+class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
 	GENERATED_BODY()
 
@@ -74,6 +75,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* FireWeaponMontage;
+
+	void ToggleCharacterVisibility(bool IsVisible);
+	void HideCameraIfCharacterClose();
+
+	UPROPERTY(EditAnywhere)
+	float CameraThreshold = 200.f;
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();

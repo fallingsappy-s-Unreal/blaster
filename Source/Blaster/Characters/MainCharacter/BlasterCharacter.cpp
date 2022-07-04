@@ -39,6 +39,7 @@ ABlasterCharacter::ABlasterCharacter()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
@@ -64,6 +65,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AimOffset(DeltaTime);
+	HideCameraIfCharacterClose();
 }
 
 void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -292,6 +294,29 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 	if (Combat)
 	{
 		Combat->EquipWeapon(OverlappingWeapon);
+	}
+}
+
+void ABlasterCharacter::ToggleCharacterVisibility(bool IsVisible)
+{
+	GetMesh()->SetVisibility(!IsVisible);
+
+	if(Combat && Combat->EquippedWeapon && Combat->EquippedWeapon->GetWeaponMesh())
+	{
+		Combat->EquippedWeapon->GetWeaponMesh()->bOwnerNoSee = IsVisible;
+	}
+}
+
+void ABlasterCharacter::HideCameraIfCharacterClose()
+{
+	if (!IsLocallyControlled()) return;
+	if ((FollowCamera->GetComponentLocation() - GetActorLocation()).Size() < CameraThreshold)
+	{
+		ToggleCharacterVisibility(true);
+	}
+	else
+	{
+		ToggleCharacterVisibility(false);
 	}
 }
 

@@ -79,11 +79,12 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (BlasterCharacter->IsLocallyControlled())
 		{
 			bLocallyControlled = true;
+
+			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(),
+				RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - BlasterCharacter->GetHitTarget()));
 			
 			// ???????
-			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(),
-				RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - BlasterCharacter->GetHitTarget())
-			);
+			RightHandRotation = FMath::RInterpTo(RightHandRotation, LookAtRotation, DeltaSeconds, 30.f);
 		}
 	}
 }

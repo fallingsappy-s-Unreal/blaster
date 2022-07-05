@@ -82,7 +82,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* HitReactMontage;
 
-	void PlayHitMontage();
+	void PlayHitReactMontage();
 	
 	void ToggleCharacterVisibility(bool IsVisible);
 	void HideCameraIfCharacterClose();

@@ -120,10 +120,10 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 
 void ABlasterCharacter::MulticastHit_Implementation()
 {
-	PlayHitMontage();
+	PlayHitReactMontage();
 }
 
-void ABlasterCharacter::PlayHitMontage()
+void ABlasterCharacter::PlayHitReactMontage()
 {
 	if (Combat == nullptr || Combat->EquippedWeapon == nullptr)
 	{
@@ -136,7 +136,7 @@ void ABlasterCharacter::PlayHitMontage()
 	{
 		AnimInstance->Montage_Play(HitReactMontage);
 		
-		FName SectionName = FName("FromFront");
+		FName SectionName("FromFront");
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }

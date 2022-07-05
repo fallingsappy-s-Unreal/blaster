@@ -46,13 +46,13 @@ protected:
 	
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
-	class AWeapon* EquippedWeapon;
+	AWeapon* EquippedWeapon;
 
-	class ABlasterCharacter* Character;
+	ABlasterCharacter* Character;
 
 	class ABlasterPlayerController* Controller;
 
-	class ABlasterHUD* HUD;
+	ABlasterHUD* HUD;
 
 	UPROPERTY(Replicated)
 	bool bAiming;

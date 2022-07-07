@@ -55,12 +55,17 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		TraceUnderCrosshairs(HitResult);
 		HitTarget = HitResult.ImpactPoint;
 
-		SetHUDCrosshairs(DeltaTime);
+		SetHUDCrosshairs(DeltaTime, HitResult);
 		InterpFOV(DeltaTime);
 	}
 }
 
-void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
+bool UCombatComponent::CheckIfEnemyUnderCrosshair(const FHitResult& HitResult)
+{
+	return HitResult.GetActor() && HitResult.GetActor()->Implements<UInteractWithCrosshairsInterface>();
+}
+
+void UCombatComponent::SetHUDCrosshairs(float DeltaTime, const FHitResult& HitResult)
 {
 	if (Character == nullptr || Character->Controller == nullptr)
 	{
@@ -124,6 +129,15 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0, DeltaTime, 30.f);
 			}
 
+			if (CheckIfEnemyUnderCrosshair(HitResult))
+			{
+				CrosshairPointingEnemyFactor = FMath::FInterpTo(CrosshairPointingEnemyFactor, 0.38f, DeltaTime, 10.f);
+			}
+			else
+			{
+				CrosshairPointingEnemyFactor = FMath::FInterpTo(CrosshairPointingEnemyFactor, 0, DeltaTime, 10.f);
+			}
+
 			CrosshairShootingFactor = FMath::FInterpTo(CrosshairShootingFactor, 0, DeltaTime, 40.f);
 			
 			HUDPackage.CrosshairsSpread =
@@ -131,7 +145,8 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 				CrosshairVelocityFactor +
 				CrosshairInAirFactor -
 				CrosshairAimFactor +
-				CrosshairShootingFactor;
+				CrosshairShootingFactor -
+				CrosshairPointingEnemyFactor;
 
 			HUD->SetHUDPackage(HUDPackage);
 		}
@@ -237,7 +252,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 
 		GetWorld()->LineTraceSingleByChannel(TraceHitResult, Start, End, ECC_Visibility);
 
-		if (TraceHitResult.GetActor() && TraceHitResult.GetActor()->Implements<UInteractWithCrosshairsInterface>())
+		if (CheckIfEnemyUnderCrosshair(TraceHitResult))
 		{
 			HUDPackage.CrosshairsColor = FLinearColor::Red;
 		}

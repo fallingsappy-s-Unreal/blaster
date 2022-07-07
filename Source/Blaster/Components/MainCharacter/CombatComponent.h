@@ -17,6 +17,7 @@ public:
 	UCombatComponent();
 	friend class ABlasterCharacter;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	bool CheckIfEnemyUnderCrosshair(const FHitResult& HitResult);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -42,7 +43,7 @@ protected:
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
-	void SetHUDCrosshairs(float DeltaTime);
+	void SetHUDCrosshairs(float DeltaTime, const FHitResult& HitResult);
 	
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
@@ -72,6 +73,7 @@ private:
 	float CrosshairInAirFactor;
 	float CrosshairAimFactor;
 	float CrosshairShootingFactor;
+	float CrosshairPointingEnemyFactor;
 
 	FVector HitTarget;
 	

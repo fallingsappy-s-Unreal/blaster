@@ -26,10 +26,8 @@ public:
 
 	void PlayFireMontage(bool bAiming);
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastHit();
-
 	virtual void OnRep_ReplicatedMovement() override;
+	void UpdateHUDHealth();
 protected:
 	virtual void BeginPlay() override;
 
@@ -48,6 +46,10 @@ protected:
 	virtual void Jump() override;
 	void FireButtonPressed();
 	void FireButtonReleased();
+	void PlayHitReactMontage();
+
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -86,8 +88,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* HitReactMontage;
-
-	void PlayHitReactMontage();
 	
 	void ToggleCharacterVisibility(bool IsVisible);
 	void HideCameraIfCharacterClose();

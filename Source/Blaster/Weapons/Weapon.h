@@ -31,6 +31,8 @@ public:
 
 	virtual void Fire(const FVector& HitTarget);
 
+	void Dropped();
+
 	/*
 	 * Texture for the weapon crosshairs
 	 */

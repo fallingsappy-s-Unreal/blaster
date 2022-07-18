@@ -156,6 +156,15 @@ private:
 	// Material instance set on the Blueprint, used with the dynamic material instance
 	UPROPERTY(EditAnywhere, Category = Elim)
 	UMaterialInstance* DissolveMaterialInstance;
+
+	/*
+	 * Elim bot
+	 */
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ElimBotEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ElimBotComponent;
 public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();

@@ -22,15 +22,11 @@ class BLASTER_API AWeapon : public AActor
 	
 public:	
 	AWeapon();
-
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
+	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
-
 	virtual void Fire(const FVector& HitTarget);
-
 	void Dropped();
 
 	/*
@@ -69,6 +65,8 @@ public:
 
 	bool bAutomatic = true;
 
+	void SetHUDAmmo(int WeaponAmmoAmount);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -89,6 +87,7 @@ protected:
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex
 	);
+	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	USkeletalMeshComponent* WeaponMesh;
@@ -111,8 +110,23 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
 
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo)
+	int32 Ammo;
 
+	UFUNCTION()
+	void OnRep_Ammo();
 
+	void SpendRound();
+
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+
+	UPROPERTY()
+    class ABlasterCharacter* BlasterOwnerCharacter;
+
+	UPROPERTY()
+	class ABlasterPlayerController* BlasterOwnerController;
+	
 public:	
 	void SetWeaponState(EWeaponState State);
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
@@ -120,4 +134,5 @@ public:
 
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
+	FORCEINLINE int GetWeaponAmmoAmount() const { return Ammo; }
 };

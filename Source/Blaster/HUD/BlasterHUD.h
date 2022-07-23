@@ -12,10 +12,19 @@ struct FHUDPackage
 	GENERATED_BODY()
 
 public:
+	UPROPERTY()
 	UTexture2D* CrosshairsCenter;
+
+	UPROPERTY()
 	UTexture2D* CrosshairsLeft;
+
+	UPROPERTY()
 	UTexture2D* CrosshairsRight;
+
+	UPROPERTY()
 	UTexture2D* CrosshairsBottom;
+
+	UPROPERTY()
 	UTexture2D* CrosshairsTop;
 	
 	float CrosshairsSpread;

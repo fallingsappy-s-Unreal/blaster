@@ -196,6 +196,21 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	Character->bUseControllerRotationYaw = true;
 }
 
+void UCombatComponent::Reload()
+{
+	if (CarriedAmmo > 0)
+	{
+		ServerReload();
+	}
+}
+
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (Character == nullptr) return;
+
+	Character->PlayReloadMontage();
+}
+
 void UCombatComponent::OnRep_EquippedWeapon(AWeapon* LastWeapon)
 {
 	if (EquippedWeapon && Character)

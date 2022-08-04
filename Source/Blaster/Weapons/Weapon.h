@@ -69,6 +69,9 @@ public:
 
 	void SetHUDAmmo(int WeaponAmmoAmount);
 
+	UPROPERTY(EditAnywhere)
+	class USoundCue* EquipSound;
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blaster/BlasterTypes/CombatState.h"
 #include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "Blaster/Interfaces/InteractWithCrosshairsInterface.h"
 #include "Components/TimelineComponent.h"
@@ -82,7 +83,7 @@ private:
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
-	UPROPERTY(VisibleAnywhere, Category = Combat)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Combat)
 	class UCombatComponent* Combat;
 
 	UFUNCTION(Server, Reliable)
@@ -202,4 +203,5 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	ECombatState GetCombatState() const;
 };

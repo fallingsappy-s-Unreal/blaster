@@ -39,7 +39,8 @@ protected:
 	void ServerSetAiming(bool bIsAiming);
 
 	UFUNCTION()
-	void OnRep_EquippedWeapon(AWeapon* LastWeapon);
+	void OnRep_EquippedWeapon();
+	
 	void Fire();
 
 	void FireButtonPressed(bool bPressed);
@@ -62,7 +63,7 @@ protected:
 	int32 AmountToReload();
 	
 private:
-	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)
+	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;
 
 	UPROPERTY()

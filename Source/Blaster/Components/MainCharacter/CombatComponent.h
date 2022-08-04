@@ -25,14 +25,10 @@ public:
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	void Reload();
-
-	UFUNCTION(Server, Reliable)
-	void ServerReload();
+	void UpdateAmmoValues();
 
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
-	
-	void HandleReload();
 
 protected:
 	virtual void BeginPlay() override;
@@ -56,6 +52,13 @@ protected:
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	void SetHUDCrosshairs(float DeltaTime, const FHitResult& HitResult);
+
+	UFUNCTION(Server, Reliable)
+	void ServerReload();
+	
+	void HandleReload();
+	
+	int32 AmountToReload();
 	
 private:
 	UPROPERTY(ReplicatedUsing  = OnRep_EquippedWeapon)

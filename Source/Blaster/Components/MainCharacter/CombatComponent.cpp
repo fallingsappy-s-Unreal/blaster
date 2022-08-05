@@ -123,27 +123,6 @@ void UCombatComponent::FireTimerFinished()
 	}
 }
 
-bool UCombatComponent::CanFire()
-{
-	if (EquippedWeapon == nullptr) return false;
-
-	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
-}
-
-void UCombatComponent::OnRep_CarriedAmmo()
-{
-	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
-	if (Controller)
-	{
-		Controller->SetHUDCarriedAmmo(CarriedAmmo);
-	}
-}
-
-void UCombatComponent::InitializeCarriedAmmo()
-{
-	CarriedAmmoMap.Emplace(EWeaponType::EWT_AssaultRifle, StartingARAmmo);
-}
-
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	MulticastFire(TraceHitTarget);
@@ -160,18 +139,6 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 	{
 		Character->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
-	}
-}
-
-void UCombatComponent::PlayEquipSound()
-{
-	if (EquippedWeapon->EquipSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(
-			this,
-			EquippedWeapon->EquipSound,
-			Character->GetActorLocation()
-		);
 	}
 }
 
@@ -229,6 +196,28 @@ void UCombatComponent::Reload()
 	}
 }
 
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
+	
+	CombatState = ECombatState::ECS_Reloading;
+	HandleReload();
+}
+
+void UCombatComponent::FinishReloading()
+{
+	if (Character == nullptr) return;
+	if (Character->HasAuthority())
+	{
+		CombatState = ECombatState::ECS_Unoccupied;
+		UpdateAmmoValues();
+	}
+	if (bFireButtonPressed)
+	{
+		Fire();
+	}
+}
+
 void UCombatComponent::UpdateAmmoValues()
 {
 	if (Character == nullptr || EquippedWeapon == nullptr) return;
@@ -241,22 +230,14 @@ void UCombatComponent::UpdateAmmoValues()
 	}
 
 	Controller = Controller == nullptr
-		             ? Cast<ABlasterPlayerController>(Character->Controller)
-		             : Controller;
+					 ? Cast<ABlasterPlayerController>(Character->Controller)
+					 : Controller;
 	if (Controller)
 	{
 		Controller->SetHUDCarriedAmmo(CarriedAmmo);
 	}
 	
 	EquippedWeapon->AddAmmo(-ReloadAmount);
-}
-
-void UCombatComponent::ServerReload_Implementation()
-{
-	if (Character == nullptr || EquippedWeapon == nullptr) return;
-	
-	CombatState = ECombatState::ECS_Reloading;
-	HandleReload();
 }
 
 void UCombatComponent::OnRep_CombatState()
@@ -273,20 +254,6 @@ void UCombatComponent::OnRep_CombatState()
 		break;
 	case ECombatState::ECS_MAX: break;
 	default: ;
-	}
-}
-
-void UCombatComponent::FinishReloading()
-{
-	if (Character == nullptr) return;
-	if (Character->HasAuthority())
-	{
-		CombatState = ECombatState::ECS_Unoccupied;
-		UpdateAmmoValues();
-	}
-	if (bFireButtonPressed)
-	{
-		Fire();
 	}
 }
 
@@ -511,5 +478,38 @@ void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 	if (Character)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	}
+}
+
+bool UCombatComponent::CanFire() const
+{
+	if (EquippedWeapon == nullptr) return false;
+
+	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
+}
+
+void UCombatComponent::OnRep_CarriedAmmo()
+{
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+}
+
+void UCombatComponent::InitializeCarriedAmmo()
+{
+	CarriedAmmoMap.Emplace(EWeaponType::EWT_AssaultRifle, StartingARAmmo);
+}
+
+void UCombatComponent::PlayEquipSound()
+{
+	if (EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			EquippedWeapon->EquipSound,
+			Character->GetActorLocation()
+		);
 	}
 }

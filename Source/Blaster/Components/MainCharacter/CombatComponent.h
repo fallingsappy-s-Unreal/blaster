@@ -125,7 +125,7 @@ private:
 	
 	void StartFireTimer();
 	void FireTimerFinished();
-	bool CanFire();
+	bool CanFire() const;
 
 	// Carried ammo for the currently-equipped weapon
 	UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)

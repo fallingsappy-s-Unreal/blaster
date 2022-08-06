@@ -25,13 +25,14 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 	void CheckTimeSync(float DeltaSeconds);
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual float GetServerTime(); // Synced with server world clock
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
-	void HandleMatchHasStarted();
 	void OnMatchStateSet(FName State);
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void HandleMatchHasStarted();
+	void HandleCooldown();
+	
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();

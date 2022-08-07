@@ -33,13 +33,17 @@ public:
 	virtual void OnRep_ReplicatedMovement() override;
 
 	void Elim();
-	
-    UFUNCTION(NetMulticast, Reliable)
+
+	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 
 	virtual void Destroyed() override;
+
+	UPROPERTY(Replicated)
+	bool bDisableGameplay = false;
 protected:
 	virtual void BeginPlay() override;
+	void RotateInPlace(float DeltaTime);
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -50,7 +54,7 @@ protected:
 	void ReloadButtonPressed();
 	void AimButtonPressed();
 	void AimButtonReleased();
-	
+
 	void CalculateAO_Pitch();
 	void AimOffset(float DeltaTime);
 	void SimProxiesTurn();
@@ -60,7 +64,8 @@ protected:
 	void PlayHitReactMontage();
 
 	UFUNCTION()
-	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
+	                   class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
 
 	// Poll for any relevant classes and initialize our HUD
@@ -112,7 +117,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* ElimMontage;
-		
+
 	void ToggleCharacterVisibility(bool IsVisible);
 	void HideCameraIfCharacterClose();
 
@@ -132,23 +137,23 @@ private:
 	*/
 	UPROPERTY(EditAnywhere, Category = "Player State")
 	float MaxHealth = 100.f;
-	
+
 	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere, Category = "Player State")
 	float Health = 100.f;
-	
+
 	UFUNCTION()
 	void OnRep_Health();
 
 	UPROPERTY()
 	class ABlasterPlayerController* BlasterPlayerController;
-	
+
 	bool bElimmed = false;
 
 	FTimerHandle ElimTimer;
 
 	UPROPERTY(EditDefaultsOnly)
 	float ElimDelay = 3.f;
-	
+
 	void ElimTimerFinished();
 
 	/*
@@ -204,4 +209,6 @@ public:
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 	ECombatState GetCombatState() const;
+	FORCEINLINE UCombatComponent* GetCombatComponent() const { return Combat; }
+	FORCEINLINE bool GetDisabledGameplay() const { return bDisableGameplay; }
 };

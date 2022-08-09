@@ -65,6 +65,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float FireDelay = .15f;
 
+	UPROPERTY(EditAnywhere, Category = Combat)
 	bool bAutomatic = true;
 
 	void SetHUDAmmo(int WeaponAmmoAmount);

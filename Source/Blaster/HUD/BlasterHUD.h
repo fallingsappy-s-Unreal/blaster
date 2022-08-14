@@ -52,7 +52,7 @@ public:
 	UPROPERTY()
 	class UCharacterOverlay* CharacterOverlay;
 
-	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UPROPERTY(EditAnywhere, Category = "Announcements")
 	TSubclassOf<UUserWidget> AnnouncementClass;
 
 	UPROPERTY()

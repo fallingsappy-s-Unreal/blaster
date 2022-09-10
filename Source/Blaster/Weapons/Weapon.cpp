@@ -2,6 +2,7 @@
 
 #include "Casing.h"
 #include "Blaster/Characters/MainCharacter/BlasterCharacter.h"
+#include "Blaster/Components/MainCharacter/CombatComponent.h"
 #include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
@@ -126,6 +127,15 @@ void AWeapon::SpendRound()
 
 void AWeapon::OnRep_Ammo()
 {
+	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr
+							? Cast<ABlasterCharacter>(GetOwner())
+							: BlasterOwnerCharacter;
+
+	if (BlasterOwnerCharacter && BlasterOwnerCharacter->GetCombatComponent() && IsFull())
+	{
+		BlasterOwnerCharacter->GetCombatComponent()->JumpToShotgunEnd();
+	}
+	
 	SetHUDAmmo(Ammo);
 }
 
@@ -170,6 +180,11 @@ void AWeapon::SetWeaponState(EWeaponState State)
 bool AWeapon::IsEmpty()
 {
 	return Ammo <= 0;
+}
+
+bool AWeapon::IsFull()
+{
+	return Ammo == MagCapacity;
 }
 
 void AWeapon::OnRep_WeaponState()

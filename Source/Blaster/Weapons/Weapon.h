@@ -146,5 +146,6 @@ public:
 	FORCEINLINE int32 GetWeaponAmmoAmount() const { return Ammo; }
 	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
 	bool IsEmpty();
+	bool IsFull();
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 };

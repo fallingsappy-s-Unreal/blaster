@@ -27,11 +27,17 @@ public:
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	void Reload();
 	void UpdateAmmoValues();
+	void UpdateShotgunAmmoValues();
 
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 	
 	void FireButtonPressed(bool bPressed);
+
+	UFUNCTION(BlueprintCallable)
+	void ShotgunShellReload();
+
+	void JumpToShotgunEnd();
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);

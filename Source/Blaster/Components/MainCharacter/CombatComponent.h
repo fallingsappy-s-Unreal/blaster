@@ -22,8 +22,7 @@ public:
 	bool CheckIfEnemyUnderCrosshair(const FHitResult& HitResult);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	void PlayEquipSound();
+	
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	void Reload();
 	void UpdateAmmoValues();
@@ -75,6 +74,12 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
 	
+	void DropEquippedWeapon();
+	void AttachActorToLeftHand(AActor* ActorToAttach);
+	void AttachActorToSocket(AActor* ActorToAttach, FName SocketName);
+	void UpdateCarriedAmmo();
+	void PlayEquipWeaponSound();
+	void ReloadEmptyWeapon();
 private:
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;

@@ -225,5 +225,6 @@ public:
 	ECombatState GetCombatState() const;
 	FORCEINLINE UCombatComponent* GetCombatComponent() const { return Combat; }
 	FORCEINLINE bool GetDisabledGameplay() const { return bDisableGameplay; }
-	FORCEINLINE UAnimMontage* GetReloadMontage() const { return ReloadMontage; }  
+	FORCEINLINE UAnimMontage* GetReloadMontage() const { return ReloadMontage; }
+	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }
 };

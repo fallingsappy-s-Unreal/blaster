@@ -40,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ThrowGrenadeFinished();
+
+	UFUNCTION(BlueprintCallable)
+	void LaunchGrenade();
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
@@ -80,6 +83,7 @@ protected:
 	void UpdateCarriedAmmo();
 	void PlayEquipWeaponSound();
 	void ReloadEmptyWeapon();
+	void ShowAttachedGrenade(bool bShowGrenade);
 private:
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;

@@ -26,8 +26,6 @@ public:
 	
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	void Reload();
-	void UpdateAmmoValues();
-	void UpdateShotgunAmmoValues();
 
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
@@ -193,6 +191,20 @@ private:
 
 	UFUNCTION()
 	void OnRep_CombatState();
+
+	void UpdateAmmoValues();
+	void UpdateShotgunAmmoValues();
+
+	UPROPERTY(ReplicatedUsing = OnRep_Grenades)
+	int32 Grenades = 4;
+
+	UFUNCTION()
+	void OnRep_Grenades();
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxGrenades = 4;
+
+	void UpdateHUDGrenades();
 public:	
-	
+	FORCEINLINE int32 GetGrenades() const { return Grenades; }
 };

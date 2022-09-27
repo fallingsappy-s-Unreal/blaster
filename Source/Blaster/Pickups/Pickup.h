@@ -30,6 +30,10 @@ protected:
 		bool bFromSweep,
 		const FHitResult& SweepResult
 	);
+
+	UPROPERTY(EditAnywhere)
+	float BaseTurnRate = 45.f;
+	
 private:
 	UPROPERTY(EditAnywhere)
 	USphereComponent* OverlapSphere;

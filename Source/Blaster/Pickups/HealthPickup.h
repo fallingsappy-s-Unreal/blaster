@@ -6,9 +6,6 @@
 #include "Pickup.h"
 #include "HealthPickup.generated.h"
 
-class UNiagaraComponent;
-class UNiagaraSystem;
-
 /**
  * 
  */
@@ -19,7 +16,6 @@ class BLASTER_API AHealthPickup : public APickup
 
 public:
 	AHealthPickup();
-	virtual void Destroyed() override;
 protected:
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
@@ -31,10 +27,4 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float HealingTime = 5.f;
-
-	UPROPERTY(VisibleAnywhere)
-	UNiagaraComponent* PickupEffectComponent;
-
-	UPROPERTY(EditAnywhere)
-	UNiagaraSystem* PickupEffect;
 };

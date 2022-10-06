@@ -86,19 +86,25 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 	TimeSinceLastMovementReplication = 0.f;
 }
 
-void ABlasterCharacter::Elim()
+void ABlasterCharacter::DropOrDestroyWeapons()
 {
-	if (Combat && Combat->EquippedWeapon)
+	if (Combat)
 	{
-		if (Combat->EquippedWeapon->bDestroyWeapon)
+		if (Combat->EquippedWeapon)
 		{
-			Combat->EquippedWeapon->Destroy();
+			DropOrDestroyWeapon(Combat->EquippedWeapon);
 		}
-		else
+
+		if (Combat->SecondaryWeapon)
 		{
-			Combat->EquippedWeapon->Dropped();
+			DropOrDestroyWeapon(Combat->SecondaryWeapon);
 		}
 	}
+}
+
+void ABlasterCharacter::Elim()
+{
+	DropOrDestroyWeapons();
 
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinished, ElimDelay);
@@ -169,6 +175,20 @@ void ABlasterCharacter::ElimTimerFinished()
 	if (BlasterGameMode)
 	{
 		BlasterGameMode->RequestRespawn(this, Controller);
+	}
+}
+
+void ABlasterCharacter::DropOrDestroyWeapon(AWeapon* Weapon)
+{
+	if (Weapon == nullptr) return;
+	
+	if (Weapon->bDestroyWeapon)
+	{
+		Weapon->Destroy();
+	}
+	else
+	{
+		Weapon->Dropped();
 	}
 }
 

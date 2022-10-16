@@ -62,6 +62,7 @@ protected:
 	void OnRep_SecondaryWeapon();
 	
 	void Fire();
+	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
 
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
@@ -163,6 +164,7 @@ private:
 	
 	void StartFireTimer();
 	void FireTimerFinished();
+
 	bool CanFire() const;
 
 	// Carried ammo for the currently-equipped weapon

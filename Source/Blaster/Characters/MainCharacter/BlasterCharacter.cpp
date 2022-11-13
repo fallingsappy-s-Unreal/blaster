@@ -21,6 +21,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 #include "Components/BoxComponent.h"
+#include "Blaster/Components/MainCharacter/LagCompensationComponent.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -48,6 +49,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	Buff = CreateDefaultSubobject<UBuffComponent>(TEXT("Buff"));
 	Buff->SetIsReplicated(true);
+
+	LagCompensation = CreateDefaultSubobject<ULagCompensationComponent>(TEXT("LagCompensation"));
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
@@ -375,6 +378,16 @@ void ABlasterCharacter::PostInitializeComponents()
 		Buff->Character = this;
 		Buff->SetInitialSpeeds(GetCharacterMovement()->MaxWalkSpeed, GetCharacterMovement()->MaxWalkSpeedCrouched);
 		Buff->SetInitialJumpVelocity(GetCharacterMovement()->JumpZVelocity);
+	}
+
+	if (LagCompensation)
+	{
+		LagCompensation->Character = this;
+
+		if (BlasterPlayerController)
+		{
+			LagCompensation->Controller = Cast<ABlasterPlayerController>(BlasterPlayerController);
+		}
 	}
 }
 

@@ -12,6 +12,7 @@
 
 class UCombatComponent;
 class UBuffComponent;
+class ULagCompensationComponent;
 class AWeapon;
 class UBoxComponent;
 
@@ -162,11 +163,19 @@ private:
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
+
+	/*
+	* Blaster components
+	*/
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Combat)
 	UCombatComponent* Combat;
 
 	UPROPERTY(VisibleAnywhere)
 	UBuffComponent* Buff;
+
+	UPROPERTY(VisibleAnywhere)
+	ULagCompensationComponent* LagCompensation;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();

@@ -58,6 +58,40 @@ public:
 	
 	void SpawnDefaultWeapon();
 
+	UPROPERTY()
+	TMap<FName, UBoxComponent*> HitCollisionBoxes;
+protected:
+	virtual void BeginPlay() override;
+	void RotateInPlace(float DeltaTime);
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void Turn(float Value);
+	void LookUp(float Value);
+	void EquipButtonPressed();
+	void CrouchButtonPressed();
+	void ReloadButtonPressed();
+	void AimButtonPressed();
+	void AimButtonReleased();
+	void GrenadeButtonPressed();
+
+	void CalculateAO_Pitch();
+	void AimOffset(float DeltaTime);
+	void SimProxiesTurn();
+	virtual void Jump() override;
+	void FireButtonPressed();
+	void FireButtonReleased();
+	void PlayHitReactMontage();
+	void DropOrDestroyWeapon(AWeapon* Weapon);
+	void DropOrDestroyWeapons();
+	
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
+	                   class AController* InstigatorController, AActor* DamageCauser);
+
+	// Poll for any relevant classes and initialize our HUD
+	void PollInit();
+
 	/*
 	* Hit boxes used for server-side rewind
 	*/
@@ -114,37 +148,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* foot_r;
-protected:
-	virtual void BeginPlay() override;
-	void RotateInPlace(float DeltaTime);
-
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void Turn(float Value);
-	void LookUp(float Value);
-	void EquipButtonPressed();
-	void CrouchButtonPressed();
-	void ReloadButtonPressed();
-	void AimButtonPressed();
-	void AimButtonReleased();
-	void GrenadeButtonPressed();
-
-	void CalculateAO_Pitch();
-	void AimOffset(float DeltaTime);
-	void SimProxiesTurn();
-	virtual void Jump() override;
-	void FireButtonPressed();
-	void FireButtonReleased();
-	void PlayHitReactMontage();
-	void DropOrDestroyWeapon(AWeapon* Weapon);
-	void DropOrDestroyWeapons();
-	
-	UFUNCTION()
-	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
-	                   class AController* InstigatorController, AActor* DamageCauser);
-
-	// Poll for any relevant classes and initialize our HUD
-	void PollInit();
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class USpringArmComponent* CameraBoom;

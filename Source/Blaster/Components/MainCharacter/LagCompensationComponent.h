@@ -11,14 +11,14 @@ struct FBoxInformation
 {
 	GENERATED_BODY()
 
-		UPROPERTY()
-		FVector Location;
+	UPROPERTY()
+	FVector Location;
 
 	UPROPERTY()
-		FRotator Rotation;
+	FRotator Rotation;
 
 	UPROPERTY()
-		FVector BoxExtent;
+	FVector BoxExtent;
 };
 
 USTRUCT(BlueprintType)
@@ -26,11 +26,11 @@ struct FFramePackage
 {
 	GENERATED_BODY()
 
-		UPROPERTY()
-		float Time;
+	UPROPERTY()
+	float Time;
 
 	UPROPERTY()
-		TMap<FName, FBoxInformation> HitBoxInfo;
+	TMap<FName, FBoxInformation> HitBoxInfo;
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -54,6 +54,11 @@ private:
 
 	UPROPERTY()
 	ABlasterPlayerController* Controller;
+
+	TDoubleLinkedList<FFramePackage> FrameHistory;
+
+	UPROPERTY(EditAnywhere)
+	float MaxRecordTime = 4.f;
 
 public:
 

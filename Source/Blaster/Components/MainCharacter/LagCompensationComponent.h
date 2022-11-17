@@ -6,6 +6,7 @@
 
 class ABlasterPlayerController;
 class ABlasterCharacter;
+class AWeapon;
 
 USTRUCT(BlueprintType)
 struct FBoxInformation
@@ -62,9 +63,19 @@ public:
 		float HitTime
 	);
 
+	UFUNCTION(Server, Reliable)
+	void ServerScoreRequest(
+		ABlasterCharacter* HitCharacter,
+		const FVector_NetQuantize& TraceStart,
+		const FVector_NetQuantize& HitLocation,
+		float HitTime,
+		AWeapon* DamageCauser
+	);
+
 protected:
 	virtual void BeginPlay() override;
 	void SaveFramePackage(FFramePackage& Package);
+	void SaveFramePackage();
 	FFramePackage InterpBetweenFrames(const FFramePackage& OlderFrame, const FFramePackage& YoungerFrame, float HitTime);
 	FServerSideRewindResult ConfirmHit(
 		const FFramePackage& Package,

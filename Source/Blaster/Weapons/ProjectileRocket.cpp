@@ -19,8 +19,8 @@ AProjectileRocket::AProjectileRocket()
 	RocketMovementComponent = CreateDefaultSubobject<URocketMovementComponent>(TEXT("Rocket Movement Component"));
 	RocketMovementComponent->bRotationFollowsVelocity = true;
 	RocketMovementComponent->SetIsReplicated(true);
-	ProjectileMovementComponent->InitialSpeed = InitialSpeed;
-	ProjectileMovementComponent->MaxSpeed = InitialSpeed;
+	RocketMovementComponent->InitialSpeed = InitialSpeed;
+	RocketMovementComponent->MaxSpeed = InitialSpeed;
 }
 
 #if WITH_EDITOR

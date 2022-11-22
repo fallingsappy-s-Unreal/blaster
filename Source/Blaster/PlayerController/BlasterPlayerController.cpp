@@ -35,11 +35,18 @@ void ABlasterPlayerController::CheckPing(float DeltaSeconds)
 
 		if (PlayerState)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("PlayerState->GetPing() * 4: %d"), PlayerState->GetPing() * 4);
+
 			// Ping is compressed; it's actually ping / 4
 			if (PlayerState->GetPing() * 4 > HighPingThreshold)
 			{
 				HighPingWarning();
 				PingAnimationRunningTime = 0.f;
+				ServerReportPingStatus(true);
+			}
+			else
+			{
+				ServerReportPingStatus(false);
 			}
 		}
 
@@ -159,6 +166,12 @@ void ABlasterPlayerController::CheckTimeSync(float DeltaSeconds)
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 		TimeSyncRunningTime = 0.f;
 	}
+}
+
+// Is the ping too high?
+void ABlasterPlayerController::ServerReportPingStatus_Implementation(bool bHighPing)
+{
+	HighPingDelegate.Broadcast(bHighPing);
 }
 
 float ABlasterPlayerController::GetServerTime()

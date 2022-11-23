@@ -297,8 +297,6 @@ void AWeapon::OnEquippedSecondary()
 	WeaponMesh->SetSimulatePhysics(false);
 	WeaponMesh->SetEnableGravity(false);
 	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	EnableCustomDepth(true);
 	
 	if (WeaponType == EWeaponType::EWT_SubmachineGun)
 	{

@@ -17,6 +17,7 @@
 #include "GameFramework/GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Blaster/HUD/ReturnToMainMenu.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
@@ -64,6 +65,28 @@ void ABlasterPlayerController::CheckPing(float DeltaSeconds)
 		if (PingAnimationRunningTime > HighPingDuration)
 		{
 			StopHighPingWarning();
+		}
+	}
+}
+
+void ABlasterPlayerController::ShowMenu()
+{
+	if (MenuWidget == nullptr) return;
+	if (GameMenu == nullptr)
+	{
+		GameMenu = CreateWidget<UReturnToMainMenu>(this, MenuWidget);
+	}
+
+	if (GameMenu)
+	{
+		bGameMenuOpened = !bGameMenuOpened;
+		if (bGameMenuOpened)
+		{
+			GameMenu->MenuSetup();
+		}
+		else
+		{
+			GameMenu->MenuTearDown();
 		}
 	}
 }
@@ -314,6 +337,15 @@ void ABlasterPlayerController::PollInit()
 			}
 		}
 	}
+}
+
+void ABlasterPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	if (InputComponent == nullptr) return;
+
+	InputComponent->BindAction("Menu", IE_Pressed, this, &ABlasterPlayerController::ShowMenu);
 }
 
 void ABlasterPlayerController::HighPingWarning()

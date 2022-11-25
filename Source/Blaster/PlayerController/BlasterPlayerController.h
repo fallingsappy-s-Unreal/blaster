@@ -7,6 +7,8 @@
 #include "BlasterPlayerController.generated.h"
 
 class ABlasterGameMode;
+class UUserWidget;
+class UReturnToMainMenu;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighPingDelegate, bool, bPingTooHigh);
 /**
  * 
@@ -62,6 +64,8 @@ protected:
 
 	void PollInit();
 
+	virtual void SetupInputComponent() override;
+
 	UFUNCTION(Server, Reliable)
 	void ServerCheckMatchState();
 
@@ -71,9 +75,23 @@ protected:
 	void HighPingWarning();
 	void StopHighPingWarning();
 	void CheckPing(float DeltaSeconds);
+
+	void ShowMenu();
+
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
+
+	/*
+	* Menu
+	*/
+	UPROPERTY(EditAnywhere, Category = HUD)
+	TSubclassOf<UUserWidget> MenuWidget;
+
+	UPROPERTY()
+	UReturnToMainMenu* GameMenu;
+
+	bool bGameMenuOpened = false;
 
 	UPROPERTY()
 	ABlasterGameMode* BlasterGameMode;

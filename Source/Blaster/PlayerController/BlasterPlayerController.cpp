@@ -36,8 +36,6 @@ void ABlasterPlayerController::CheckPing(float DeltaSeconds)
 
 		if (PlayerState)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PlayerState->GetPing() * 4: %d"), PlayerState->GetPing() * 4);
-
 			// Ping is compressed; it's actually ping / 4
 			if (PlayerState->GetPing() * 4 > HighPingThreshold)
 			{

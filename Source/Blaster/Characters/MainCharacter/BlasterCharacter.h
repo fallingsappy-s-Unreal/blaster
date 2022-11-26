@@ -15,6 +15,8 @@ class UBuffComponent;
 class ULagCompensationComponent;
 class AWeapon;
 class UBoxComponent;
+class UNiagaraSystem;
+class UNiagaraComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLeftGame);
 
@@ -75,6 +77,12 @@ public:
 	void ServerLeaveGame();
 
 	FOnLeftGame OnLeftGame;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastGainedTheLead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLostTheLead();
 protected:
 	virtual void BeginPlay() override;
 	void RotateInPlace(float DeltaTime);
@@ -303,7 +311,7 @@ private:
 	UMaterialInstance* DissolveMaterialInstance;
 
 	/*
-	 * Elim bot
+	 * Elim effects
 	 */
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ElimBotEffect;
@@ -316,6 +324,11 @@ private:
 
 	UPROPERTY()
 	class ABlasterPlayerState* BlasterPlayerState;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* CrownSystem;
+
+	UNiagaraComponent* CrownComponent;
 	/*
 	 * Grenade
 	 */

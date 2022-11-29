@@ -34,12 +34,12 @@ void ABlasterGameState::UpdateTopScore(ABlasterPlayerState* ScoringPlayer)
 	}
 }
 
-void ABlasterGameState::OnRep_RedTeamScore_Implementation()
+void ABlasterGameState::OnRep_RedTeamScore()
 {
 	
 }
 
-void ABlasterGameState::OnRep_BlueTeamScore_Implementation()
+void ABlasterGameState::OnRep_BlueTeamScore()
 {
 	
 }

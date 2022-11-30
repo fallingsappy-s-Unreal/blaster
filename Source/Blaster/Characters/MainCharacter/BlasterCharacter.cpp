@@ -237,7 +237,7 @@ void ABlasterCharacter::MulticastElim_Implementation(bool bPlayerLeftGame)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AttachedGrenade->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
+
 	// Spawn elim bot
 	if (ElimBotEffect)
 	{
@@ -296,7 +296,7 @@ void ABlasterCharacter::ServerLeaveGame_Implementation()
 void ABlasterCharacter::DropOrDestroyWeapon(AWeapon* Weapon)
 {
 	if (Weapon == nullptr) return;
-	
+
 	if (Weapon->bDestroyWeapon)
 	{
 		Weapon->Destroy();
@@ -352,6 +352,27 @@ void ABlasterCharacter::MulticastLostTheLead_Implementation()
 	if (CrownComponent)
 	{
 		CrownComponent->DestroyComponent();
+	}
+}
+
+void ABlasterCharacter::SetTeamColor(ETeam Team)
+{
+	if (GetMesh() == nullptr || OriginalMaterial == nullptr) return;
+	
+	switch (Team)
+	{
+	case ETeam::ET_RedTeam:
+		GetMesh()->SetMaterial(0, RedMaterial);
+		DissolveMaterialInstance = RedDissolveMatInst;
+		break;
+	case ETeam::ET_BlueTeam:
+		GetMesh()->SetMaterial(0, BlueMaterial);
+		DissolveMaterialInstance = BlueDissolveMatInst;
+		break;
+	case ETeam::ET_NoTeam:
+		GetMesh()->SetMaterial(0, OriginalMaterial);
+		DissolveMaterialInstance = BlueDissolveMatInst;
+		break;
 	}
 }
 
@@ -589,7 +610,7 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 			Shield = 0.f;
 		}
 	}
-	
+
 	Health = FMath::Clamp(Health - DamageToHealth, 0.f, MaxHealth);
 
 	UpdateHUDHealth();
@@ -651,7 +672,8 @@ void ABlasterCharacter::EquipButtonPressed()
 	{
 		if (Combat->CombatState == ECombatState::ECS_Unoccupied) ServerEquipButtonPressed();
 
-		bool bSwap = Combat->ShouldSwapWeapons() && !HasAuthority() && Combat->CombatState == ECombatState::ECS_Unoccupied && OverlappingWeapon == nullptr;
+		bool bSwap = Combat->ShouldSwapWeapons() && !HasAuthority() && Combat->CombatState ==
+			ECombatState::ECS_Unoccupied && OverlappingWeapon == nullptr;
 		if (bSwap)
 		{
 			PlaySwapMontage();
@@ -877,7 +899,7 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 		}
 		else if (Combat->ShouldSwapWeapons())
 		{
-			Combat->SwapWeapons();	
+			Combat->SwapWeapons();
 		}
 	}
 }
@@ -915,7 +937,7 @@ void ABlasterCharacter::OnRep_Health(float LastHealth)
 	{
 		PlayHitReactMontage();
 	}
-	
+
 	UpdateHUDHealth();
 }
 
@@ -925,7 +947,7 @@ void ABlasterCharacter::OnRep_Shield(float LastShield)
 	{
 		PlayHitReactMontage();
 	}
-	
+
 	UpdateHUDShield();
 }
 
@@ -944,8 +966,8 @@ void ABlasterCharacter::UpdateHUDHealth()
 void ABlasterCharacter::UpdateHUDShield()
 {
 	BlasterPlayerController = BlasterPlayerController == nullptr
-							  ? Cast<ABlasterPlayerController>(Controller)
-							  : BlasterPlayerController;
+		                          ? Cast<ABlasterPlayerController>(Controller)
+		                          : BlasterPlayerController;
 
 	if (BlasterPlayerController)
 	{
@@ -956,8 +978,8 @@ void ABlasterCharacter::UpdateHUDShield()
 void ABlasterCharacter::UpdateHUDAmmo()
 {
 	BlasterPlayerController = BlasterPlayerController == nullptr
-						  ? Cast<ABlasterPlayerController>(Controller)
-						  : BlasterPlayerController;
+		                          ? Cast<ABlasterPlayerController>(Controller)
+		                          : BlasterPlayerController;
 
 	if (BlasterPlayerController && Combat && Combat->EquippedWeapon)
 	{
@@ -970,7 +992,7 @@ void ABlasterCharacter::SpawnDefaultWeapon()
 {
 	ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
 	UWorld* World = GetWorld();
-	
+
 	if (BlasterGameMode && World && !bElimmed && DefaultWeaponClass)
 	{
 		AWeapon* StartingWeapon = World->SpawnActor<AWeapon>(DefaultWeaponClass);
@@ -991,6 +1013,7 @@ void ABlasterCharacter::PollInit()
 		{
 			BlasterPlayerState->AddToScore(0.f);
 			BlasterPlayerState->AddToDefeats(0);
+			SetTeamColor(BlasterPlayerState->GetTeam());
 
 			ABlasterGameState* BlasterGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
 

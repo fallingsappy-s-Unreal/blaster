@@ -171,3 +171,8 @@ void ABlasterGameMode::PlayerLeftGame(ABlasterPlayerState* BlasterPlayerState)
 		CharacterLeaving->Elim(true);
 	}
 }
+
+float ABlasterGameMode::CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage)
+{
+	return BaseDamage;
+}

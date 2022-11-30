@@ -19,5 +19,5 @@ public:
 	virtual void Logout(AController* Exiting) override;
 protected:
 	virtual void HandleMatchHasStarted() override;
-	
+	virtual float CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage) override;
 };

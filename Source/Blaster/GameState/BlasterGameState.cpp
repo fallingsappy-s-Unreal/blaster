@@ -3,6 +3,7 @@
 
 #include "BlasterGameState.h"
 
+#include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
@@ -37,19 +38,43 @@ void ABlasterGameState::UpdateTopScore(ABlasterPlayerState* ScoringPlayer)
 void ABlasterGameState::RedTeamScores()
 {
 	++RedTeamScore;
+
+	ABlasterPlayerController* BPlayer = Cast<ABlasterPlayerController>(GetWorld()->GetFirstPlayerController());
+
+	if (BPlayer)
+	{
+		BPlayer->SetHUDReadTeamScore(RedTeamScore);
+	}
 }
 
 void ABlasterGameState::BlueTeamScores()
 {
 	++BlueTeamScore;
+
+	ABlasterPlayerController* BPlayer = Cast<ABlasterPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	if (BPlayer)
+	{
+		BPlayer->SetHUDBlueTeamScore(BlueTeamScore);
+	}
 }
 
 void ABlasterGameState::OnRep_RedTeamScore()
 {
-	
+	ABlasterPlayerController* BPlayer = Cast<ABlasterPlayerController>(GetWorld()->GetFirstPlayerController());
+
+	if (BPlayer)
+	{
+		BPlayer->SetHUDReadTeamScore(RedTeamScore);
+	}
 }
 
 void ABlasterGameState::OnRep_BlueTeamScore()
 {
+	ABlasterPlayerController* BPlayer = Cast<ABlasterPlayerController>(GetWorld()->GetFirstPlayerController());
 	
+	if (BPlayer)
+	{
+		BPlayer->SetHUDBlueTeamScore(BlueTeamScore);
+	}
 }

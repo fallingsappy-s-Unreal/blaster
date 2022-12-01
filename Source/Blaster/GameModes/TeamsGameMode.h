@@ -18,6 +18,7 @@ public:
 	ATeamsGameMode();
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* Exiting) override;
+	virtual void PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController) override;
 protected:
 	virtual void HandleMatchHasStarted() override;
 	virtual float CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage) override;

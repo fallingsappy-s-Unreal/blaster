@@ -3,6 +3,7 @@
 
 #include "TeamsGameMode.h"
 #include "Blaster/GameState/BlasterGameState.h"
+#include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -53,6 +54,27 @@ void ATeamsGameMode::Logout(AController* Exiting)
 		if (BGameState->BlueTeam.Contains(BPState))
 		{
 			BGameState->BlueTeam.Remove(BPState);
+		}
+	}
+}
+
+void ATeamsGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABlasterPlayerController* VictimController,
+	ABlasterPlayerController* AttackerController)
+{
+	Super::PlayerEliminated(ElimmedCharacter, VictimController, AttackerController);
+
+	ABlasterGameState* BGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
+	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
+
+	if (BGameState && AttackerPlayerState)
+	{
+		if (AttackerPlayerState->GetTeam() == ETeam::ET_BlueTeam)
+		{
+			BGameState->BlueTeamScore();
+		}
+		if (AttackerPlayerState->GetTeam() == ETeam::ET_RedTeam)
+		{
+			BGameState->RedTeamScore();
 		}
 	}
 }

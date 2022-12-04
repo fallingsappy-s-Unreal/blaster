@@ -47,6 +47,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bRotateRootBone = BlasterCharacter->ShouldRotateRootBone();
 	
 	bElimmed = BlasterCharacter->IsElimmed();
+	bHoldingTheFlag = BlasterCharacter->IsHoldingTheFlag();
 
 	// Offset Yaw for Strafing
 	const FRotator AimRotation = BlasterCharacter->GetBaseAimRotation();
